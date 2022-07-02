@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FileBrowser.iml" filepath="$PROJECT_DIR$/.idea/modules/FileBrowser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.main.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.unitTest.iml" />
+    </modules>
+  </component>
+</project>

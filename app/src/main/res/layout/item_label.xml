@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:animateLayoutChanges="true">
+
+    <View
+        android:layout_width="@dimen/dp_20"
+        android:layout_height="@dimen/dp_0"
+        android:id="@+id/marginStart"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="File Label"
+        android:id="@+id/labelName"
+        android:textSize="@dimen/sp_13"
+        android:textColor="@color/gray"
+        android:paddingStart="@dimen/dp_13"
+        android:paddingEnd="@dimen/dp_13"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5"
+        android:background="@drawable/shape_label_mid"/>
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:layout_width="@dimen/dp_13"
+        android:layout_height="@dimen/dp_13"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:src="@mipmap/ic_label_right"
+        android:tint="@color/gray"
+        android:id="@+id/rightIcon"/>
+
+    <View
+        android:layout_width="@dimen/dp_20"
+        android:layout_height="@dimen/dp_0"
+        android:id="@+id/marginEnd"/>
+
+</LinearLayout>

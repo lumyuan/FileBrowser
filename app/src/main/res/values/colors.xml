@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="TRANSPARENT">#00000000</color>
+
+    <color name="indicator_color">#88CE9C</color>
+    <color name="indicator_color_50">#8CDCF7E8</color>
+    <color name="indicator_color_rgb">#FFEBFBF1</color>
+    <color name="indicator_default">#D9D9D9</color>
+    <color name="gray_300">#E0E0E0</color>
+    <color name="gray_400">#BDBDBD</color>
+
+    <color name="text_black">#FF474658</color>
+    <color name="text_light">#60000000</color>
+    <color name="theme">#FF119EFF</color>
+    <color name="background">#FFF5F5F5</color>
+    <color name="blur_alpha">#00000000</color>
+    <color name="glass_style">#8CFFFFFF</color>
+    <color name="blue_gray_400">#FF78909C</color>
+    <color name="gray_200">#FFEEEEEE</color>
+    <color name="gray_light">#eceff2</color>
+    <color name="gray">#5f7c89</color>
+    <color name="orange_light">#fff2df</color>
+    <color name="orange">#ff9700</color>
+    <color name="green_light">#e8f6e9</color>
+    <color name="green">#53aa56</color>
+    <color name="blue_light">#e4f2fd</color>
+    <color name="blue">#FF0099FF</color>
+    <color name="teal_light">#dff7f9</color>
+    <color name="teal">#00bcd5</color>
+    <color name="purple_light">#e8eaf6</color>
+    <color name="purple">#4051b0</color>
+    <color name="pink">#FF80AB</color>
+    <color name="brown_light">#EFEBE8</color>
+    <color name="brown">#795547</color>
+    <color name="red_light">#ffebed</color>
+    <color name="red">#f14337</color>
+    <color name="deep_purple_light">#f3e5f6</color>
+    <color name="deep_purple">#9d27b1</color>
+    <color name="google_green">#3DDC84</color>
+    <color name="card_widget">#8Ceceff2</color>
+    <color name="popup_color">#CC000000</color>
+    <color name="marqueeViewColor">#FFF2F2F2</color>
+    <color name="gray_text">#FF757575</color>
+
+    <color name="teal_l">#FF26BFb1</color>
+    <color name="blue_t">#FF26C6Da</color>
+    <color name="elColor">#8C000000</color>
+
+    <color name="white_noDark">#FFFFFFFF</color>
+
+    <color name="color_list_divider">@android:color/transparent</color>
+
+    <color name="window_background_light">#FFFFFF</color>
+    <color name="window_background_dark">#000000</color>
+    <color name="cardBgDark">#181818</color>
+    <color name="cardBgDarkTransparent">#90000000</color>
+    <color name="cardBgLight">#ffffff</color>
+
+    <color name="color_powersave">#0091D5</color>
+    <color name="color_balance">#00B78A</color>
+    <color name="color_performance">#6ECB00</color>
+    <color name="color_fast">#FF7E00</color>
+
+    <color name="color_powersave_bg">#C00091D5</color>
+    <color name="color_balance_bg">#C000B78A</color>
+    <color name="color_performance_bg">#C06ECB00</color>
+    <color name="color_fast_bg">#C0FF7E00</color>
+
+    <color name="color_load_none">#00d5d9</color>
+    <color name="color_load_low">#02d98d</color>
+    <color name="color_load_mid">#87cb00</color>
+    <color name="color_load_hight">#fc8a1b</color>
+    <color name="color_load_veryhight">#f9592f</color>
+
+    <color name="colorAccent">@color/indicator_color</color>
+    <color name="colorPrimary">@color/gray_deep_light</color>
+    <color name="colorPrimaryDark">@color/gray_brown_light</color>
+
+    <color name="newYearAccent">#dc4b2f</color>
+    <color name="newYearLight">#FFD2CA</color>
+    <color name="newYearDark">#BF2A0D</color>
+    <color name="newYearBgColor">#F5EFE7</color>
+    <!--<color name="newYearBgColor">#fffaf2</color>-->
+
+    <color name="cyan">#00b9c2</color>
+    <color name="cyanLight">#D3ECED</color>
+    <color name="cyanDark">#019198</color>
+    <color name="greenLight">#E3F6BE</color>
+    <color name="greenDark">#6EA500</color>
+    <color name="orangeLight">#FFEBD8</color>
+    <color name="orangeDark">#EC7705</color>
+    <color name="blueLight">#DFF3FF</color>
+    <color name="blueDark">#1475e1</color>
+    <color name="pinkLight">#FFE6F6</color>
+    <color name="pinkDark">#D33597</color>
+    <color name="pretty">#e2259a</color>
+    <color name="prettyLight">#FFE9F7</color>
+    <color name="prettyDark">#A8116F</color>
+    <color name="violet">#7800c2</color>
+    <color name="violetLight">#DDCBE8</color>
+    <color name="violetDark">#57028C</color>
+    <color name="lightPink">#BC8DE4</color>
+    <color name="lightPinkLight">#F4E8FF</color>
+    <color name="lightPinkDark">#B177E3</color>
+
+    <color name="black_overlay">#66000000</color>
+    <!--<color name="colorAccent">#FF4081</color>-->
+    <color name="warning">#FFB300</color>
+
+    <color name="gray_background_white">#FFFFFFFF</color>
+    <color name="gray_brown">#D8D3CB</color>
+    <color name="gray_brown_light">#E8E4DE</color>
+    <color name="gray_deep_light">#F6F6F0</color>
+
+    <color name="soft_bg">#e6eef4</color>
+</resources>
