@@ -1,11 +1,14 @@
 package com.lumyuan.filebrowser.ui.widget.adapter
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.os.Environment
+import android.os.Handler
 import android.text.format.Formatter
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -15,7 +18,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
+import com.lumyuan.androidfilemanager.FileUtils
 import com.lumyuan.androidfilemanager.file.File
+import com.lumyuan.androidfilemanager.file.RankFile
 import com.lumyuan.filebrowser.FileBrowserApplication
 import com.lumyuan.filebrowser.R
 import com.lumyuan.filebrowser.databinding.ItemSimpleFileBinding
@@ -28,13 +33,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
 import java.io.*
+import kotlin.collections.HashMap
 
 
 class SimpleFileListAdapter(private var activity: AppCompatActivity,
                             private val recyclerView: RecyclerView) : RecyclerView.Adapter<SimpleFileListAdapter.FileHolder>(){
 
     private val viewModel: FileChangedViewModel = ViewModelProvider(activity).get(FileChangedViewModel::class.java)
-    private val list = ArrayList<String>()
+    private val list = ArrayList<Map<Int, Any>>()
     @SuppressLint("SimpleDateFormat")
     private val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
 
@@ -44,97 +50,136 @@ class SimpleFileListAdapter(private var activity: AppCompatActivity,
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: FileHolder, position: Int) {
-        val path = list[position]
+        val item = list[position]
         val binding = holder.binding
-        if (path == "loading..."){
-            binding.fileItem.visibility = View.GONE
-            binding.loadItem.visibility = View.VISIBLE
-            val layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
-            binding.root.layoutParams = layoutParams
-            return
-        }
-        binding.fileItem.visibility = View.VISIBLE
-        binding.loadItem.visibility = View.GONE
-        val layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        binding.root.layoutParams = layoutParams
-        loaded(binding, false)
-        val bean = FileItemBean()
-        Observable.create<FileItemBean> {
-            try {
-                val file = File(path)
-                bean.name = file.getName()
-                bean.isDirectory = file.isDirectory()
-                bean.length = if (bean.isDirectory) try {
-                    File(path).listNoRank().size
-                }catch (e: Exception){
-                    0
-                }.toLong() else file.length()
-                bean.lastModified = file.lastModified()
-            }catch (e: Exception){}
-            it.onNext(bean)
-            it.onComplete()
-        }.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                binding.fileName.text = it.name
-                binding.fileConfig.text = if (bean.isDirectory)
-                    "${bean.length}项\t\t|\t\t${simpleDateFormat.format(Date(bean.lastModified))}"
-                else
-                    "${Formatter.formatFileSize(activity, bean.length).replace("吉字节", "GB")}\t\t|\t\t${simpleDateFormat.format(Date(bean.lastModified))}"
-                if (bean.isDirectory){
-                    binding.fileRightIcon.visibility = View.VISIBLE
-                    binding.fileIcon.setImageResource(R.mipmap.ic_folder)
-                    binding.appIcon.visibility = View.GONE
-                    Observable.create { draw ->
-                        try {
-                            val findAppIcon = FileBrowserApplication.appList[bean.name.trim()]!!.icon
-                            draw.onNext(findAppIcon)
-                        }catch (e: Exception){
-                            e.printStackTrace()
-                        }
-                        draw.onComplete()
-                    }.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { draw ->
-                            binding.appIcon.setImageDrawable(draw)
-                            binding.appIcon.visibility = View.VISIBLE
-                        }
-                    binding.fileTipLayout.visibility = View.GONE
-                    Observable.create { config ->
-                        try {
-                            val findAppName = FileBrowserApplication.appList[bean.name.trim()]!!.name
-                            config.onNext(findAppName)
-                        }catch (e: Exception){
-                            e.printStackTrace()
-                        }
-                        config.onComplete()
-                    }.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { config ->
-                            binding.fileTip.text = config
-                            binding.fileTipLayout.visibility = View.VISIBLE
-                        }
-                }else {
-                    binding.fileRightIcon.visibility = View.GONE
-                    setIcon(binding, bean.name, path)
-                    binding.fileTipLayout.visibility = View.GONE
-                    binding.appIcon.visibility = View.GONE
-
-                }
-
-                binding.root.setOnClickListener {
-                    if (bean.isDirectory){
-                        openDirectory(bean.name)
-                    }
-                }
-                loaded(binding, true)
+        //加载布局
+        when(item[1]){
+            "loading..." ->{
+                binding.fileItem.visibility = View.GONE
+                binding.loadItem.visibility = View.VISIBLE
+                val layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+                binding.root.layoutParams = layoutParams
+                binding.listLoad.visibility = View.VISIBLE
+                binding.loadText.text = "全力加载中，请稍候..."
+                setAlpha(binding.root, 0F, 1F, 400)
             }
+            "field" -> {
+                binding.fileItem.visibility = View.GONE
+                binding.loadItem.visibility = View.VISIBLE
+                val layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+                binding.root.layoutParams = layoutParams
+                binding.listLoad.visibility = View.GONE
+                binding.loadText.text = "列表读取失败了..."
+                setAlpha(binding.root, 0F, 1F, 400)
+            }
+            "none" -> {
+                binding.fileItem.visibility = View.GONE
+                binding.loadItem.visibility = View.VISIBLE
+                val layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+                binding.root.layoutParams = layoutParams
+                binding.listLoad.visibility = View.GONE
+                binding.loadText.text = "这里什么也没有..."
+                setAlpha(binding.root, 0F, 1F, 400)
+            }
+            else ->{
+                val path = item[0] as File?
+                binding.fileItem.visibility = View.VISIBLE
+                binding.loadItem.visibility = View.GONE
+                val layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                binding.root.layoutParams = layoutParams
+                loaded(binding, false)
+                val bean = FileItemBean()
+                Observable.create<FileItemBean> {
+                    try {
+                        bean.name = path!!.getName()
+                        bean.isDirectory = path.isDirectory()
+                        bean.path = path.getPath()
+                        bean.lastModified = path.lastModified()
+                    }catch (e: Exception){}
+                    it.onNext(bean)
+                    it.onComplete()
+                }.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        binding.fileName.text = it.name
+                        binding.fileConfig.text = if (bean.isDirectory)
+                            "...项\t\t|\t\t${simpleDateFormat.format(Date(bean.lastModified))}"
+                        else
+                            "${Formatter.formatFileSize(activity, bean.length).replace("吉字节", "GB")}\t\t|\t\t${simpleDateFormat.format(Date(bean.lastModified))}"
+                        Observable.create<Any> { config ->
+                            bean.length = if (bean.isDirectory) try {
+                                path!!.list().size
+                            }catch (e: Exception){
+                                0
+                            }.toLong() else path!!.length()
+                            config.onNext("")
+                            config.onComplete()
+                        }.subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe {
+                                binding.fileConfig.text = if (bean.isDirectory)
+                                    "${bean.length}项\t\t|\t\t${simpleDateFormat.format(Date(bean.lastModified))}"
+                                else
+                                    "${Formatter.formatFileSize(activity, bean.length).replace("吉字节", "GB")}\t\t|\t\t${simpleDateFormat.format(Date(bean.lastModified))}"
+                            }
+                        if (bean.isDirectory){
+                            binding.fileRightIcon.visibility = View.VISIBLE
+                            binding.fileIcon.setImageResource(R.mipmap.ic_folder)
+                            binding.appIcon.visibility = View.GONE
+                            Observable.create { draw ->
+                                try {
+                                    val findAppIcon = FileBrowserApplication.appList[bean.name.trim()]!!.icon
+                                    draw.onNext(findAppIcon)
+                                }catch (e: Exception){
+                                    e.printStackTrace()
+                                }
+                                draw.onComplete()
+                            }.subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe { draw ->
+                                    binding.appIcon.setImageDrawable(draw)
+                                    binding.appIcon.visibility = View.VISIBLE
+                                }
+                            binding.fileTipLayout.visibility = View.GONE
+                            try {
+                                val findAppName = FileBrowserApplication.appList[bean.name.trim()]!!.name
+                                binding.fileTip.text = findAppName
+                                binding.fileTipLayout.visibility = View.VISIBLE
+                            }catch (e: Exception){
+                                e.printStackTrace()
+                            }
+                        }else {
+                            binding.fileRightIcon.visibility = View.GONE
+                            setIcon(binding, bean.name, path!!.getPath())
+                            binding.fileTipLayout.visibility = View.GONE
+                            binding.appIcon.visibility = View.GONE
+
+                        }
+
+                        binding.root.setOnClickListener {
+                            if (bean.isDirectory){
+                                openDirectory(bean.name)
+                            }else {
+
+                            }
+                        }
+                        loaded(binding, true)
+                    }
+
+            }
+        }
     }
 
     private fun loaded(binding: ItemSimpleFileBinding, isShow: Boolean){
@@ -150,6 +195,12 @@ class SimpleFileListAdapter(private var activity: AppCompatActivity,
             binding.configLayout.visibility = View.INVISIBLE
             binding.rightLayout.visibility = View.INVISIBLE
         }
+    }
+
+    private fun setAlpha(view: View, star: Float, end: Float, duration: Long){
+        val ofFloat = ObjectAnimator.ofFloat(view, "alpha", star, end)
+        ofFloat.duration = duration
+        ofFloat.start()
     }
 
     private fun setIcon(binding: ItemSimpleFileBinding, name: String, path: String){
@@ -251,32 +302,59 @@ class SimpleFileListAdapter(private var activity: AppCompatActivity,
         return list.size
     }
 
+    private var showPosition = true
     @SuppressLint("NotifyDataSetChanged")
     fun updateList(list: String){
         this.list.clear()
-        this.list.add("loading...")
+        val map = HashMap<Int, Any>()
+        map[1] = "loading..."
+        this.list.add(map)
         notifyDataSetChanged()
         Observable.create {
             try {
-                it.onNext(File(list).list())
+                val listFiles = File(list).listFiles()
+                RankFile.orderByType(listFiles)
+                it.onNext(listFiles)
             }catch (e : Exception){
                 e.printStackTrace()
+                Handler(activity.mainLooper).post {
+                    this.list.clear()
+                    notifyDataSetChanged()
+                    val field = HashMap<Int, Any>()
+                    field[1] = "field"
+                    this.list.add(field)
+                    notifyDataSetChanged()
+                }
             }
             it.onComplete()
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                val files = it as Array<String?>
-                this.list.clear()
-                notifyDataSetChanged()
-                for (index in files.indices ){
-                    if (files[index] != null) {
-                        files[index]?.let { it1 -> this.list.add(it1) }
-                        notifyItemInserted(index)
+                if (viewModel.getPath() == list){
+                    val files = it as Array<File?>
+                    if (files.isEmpty()){
+                        this.list.clear()
+                        notifyDataSetChanged()
+                        val none = HashMap<Int, Any>()
+                        none[1] = "none"
+                        this.list.add(none)
+                        notifyDataSetChanged()
+                    }else {
+                        this.list.clear()
+                        notifyDataSetChanged()
+                        for (index in files.indices ){
+                            if (files[index] != null) {
+                                val item = HashMap<Int, Any>()
+                                item[0] = files[index]!!
+                                this.list.add(item)
+                                notifyItemInserted(index)
+                            }
+                        }
                     }
-                }
-                recyclerView.post {
-                    recyclerView.scrollToPosition(viewModel.filePath.value!![viewModel.filePath.value!!.size - 1].position)
+                    recyclerView.post {
+                        recyclerView.scrollToPosition(if (!showPosition)viewModel.filePath.value!![viewModel.filePath.value!!.size - 1].position else viewModel.listPosition.value!!)
+                        showPosition = false
+                    }
                 }
             }
     }

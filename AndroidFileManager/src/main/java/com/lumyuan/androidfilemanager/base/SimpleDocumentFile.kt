@@ -8,7 +8,7 @@ import com.lumyuan.androidfilemanager.utils.UriUtils.path2Uri
 import com.lumyuan.androidfilemanager.utils.UriUtils.uri2Path
 import java.io.File
 
-class SimpleDocumentFile(path: String) : SimpleFile {
+class SimpleDocumentFile(private val path: String) : SimpleFile {
     private var documentFile: DocumentFile
     private var file: File
     private val context: Context = AndroidFileManagerApplication.context!!
@@ -24,7 +24,7 @@ class SimpleDocumentFile(path: String) : SimpleFile {
     }
 
     override fun getName(): String {
-        return documentFile.name!!
+        return file.name
     }
 
     override fun getParent(): String {
@@ -32,7 +32,7 @@ class SimpleDocumentFile(path: String) : SimpleFile {
     }
 
     override fun getPath(): String {
-        return file.path
+        return this.path
     }
 
     override fun canRead(): Boolean {

@@ -3,11 +3,10 @@ package com.lumyuan.filebrowser.activities
 import android.os.Bundle
 import android.os.Environment
 import android.view.KeyEvent
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.lumyuan.androidfilemanager.file.File
 import com.lumyuan.androidfilemanager.utils.ExternalStoragePermissionsUtils
 import com.lumyuan.filebrowser.base.BaseActivity
 import com.lumyuan.filebrowser.databinding.ActivityMainBinding
@@ -19,7 +18,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : BaseActivity() {
 
@@ -27,7 +25,6 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.root
 
         ExternalStoragePermissionsUtils.getExternalStoragePermission(this)
         ExternalStoragePermissionsUtils.getAllFilesAccessPermission(this)
@@ -37,12 +34,14 @@ class MainActivity : BaseActivity() {
         initFilePath()
     }
 
+    private lateinit var viewModel: FileChangedViewModel
     private lateinit var labelListAdapter: LabelListAdapter
     private fun initLabelView() {
-        labelListAdapter = LabelListAdapter(this@MainActivity, binding.labelList)
-        val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        linearLayoutManager.stackFromEnd = true
-        binding.labelList.layoutManager = linearLayoutManager
+        viewModel = ViewModelProvider(this).get(FileChangedViewModel::class.java)
+        labelListAdapter = LabelListAdapter(this, binding.labelList)
+        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        layoutManager.stackFromEnd = true
+        binding.labelList.layoutManager = layoutManager
         binding.labelList.adapter = labelListAdapter
     }
 
@@ -52,16 +51,34 @@ class MainActivity : BaseActivity() {
         val layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         binding.simpleList.layoutManager = layoutManager
         binding.simpleList.adapter = simpleFileListAdapter
+
+        binding.simpleList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE){
+                    val lm = recyclerView.layoutManager as StaggeredGridLayoutManager
+                    val mFirstVisibleItems = lm.findFirstVisibleItemPositions(IntArray(layoutManager.spanCount))
+                    viewModel.listPosition.value = mFirstVisibleItems[0]
+                }
+            }
+        })
     }
 
-    private lateinit var viewModel: FileChangedViewModel
     private fun initFilePath() {
-        viewModel = ViewModelProvider(this).get(FileChangedViewModel::class.java)
+        java.io.File("").listFiles()
+        //更新路径以及UI视图
         viewModel.filePath.observe(this){
             if (it != null){
-                labelListAdapter.updateList(it)
+                if ( it.size - labelListAdapter.list.size == 1){
+                    labelListAdapter.addList(it[it.size - 1])
+                }else if (labelListAdapter.list.size - it.size == 1){
+                    labelListAdapter.deleteList(it.size)
+                }else if (labelListAdapter.list.size - it.size > 1){
+                    labelListAdapter.jumpList(it.size)
+                }else {
+                    labelListAdapter.updateList(it)
+                }
                 Observable.create { fileList ->
-                    val list = ArrayList<String>()
                     fileList.onNext(viewModel.getPath())
                     fileList.onComplete()
                 }.subscribeOn(Schedulers.io())
@@ -71,10 +88,15 @@ class MainActivity : BaseActivity() {
                     }
             }
         }
-        if (viewModel.filePath.value == null) {
+
+        //初始化路径
+        val path = if (viewModel.filePath.value == null)
+            Environment.getExternalStorageDirectory().absolutePath
+        else
+            viewModel.getPath()
+        if (viewModel.filePath.value == null){
             Thread{
                 val fileList = ArrayList<SimpleFileBean>()
-                val path = Environment.getExternalStorageDirectory().absolutePath
                 for (i in path.split("/")){
                     fileList.add(SimpleFileBean().apply {
                         this.name = i

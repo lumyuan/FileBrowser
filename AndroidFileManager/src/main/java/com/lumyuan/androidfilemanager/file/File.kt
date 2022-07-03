@@ -9,31 +9,30 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
-import java.util.*
 
 class File(private val path: String) : SimpleStream, SimpleFile{
 
     private lateinit var simpleDocumentFile: SimpleDocumentFile
-    private var simpleFile: SimpleExternalStorageFile = SimpleExternalStorageFile(path)
+    private lateinit var simpleFile: SimpleExternalStorageFile
     private val context = AndroidFileManagerApplication.context
     private lateinit var simpleRootFile: SimpleRootFile
-    private val appDir = AndroidFileManagerApplication.context!!.filesDir.absolutePath + "/temp stream/"
 
     private var isPreviewDir = false
     private var isRootDir = false
     init {
         if (isRootDir()) simpleRootFile = SimpleRootFile(path)
-        if (isPreviewDir()) simpleDocumentFile = SimpleDocumentFile(path)
+        else if (isPreviewDir()) simpleDocumentFile = SimpleDocumentFile(path)
+        else simpleFile = SimpleExternalStorageFile(path)
         isPreviewDir = isPreviewDir()
         isRootDir = isRootDir()
     }
 
-    fun isPreviewDir(): Boolean{
+    private fun isPreviewDir(): Boolean{
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-                && path.startsWith(Environment.getExternalStorageDirectory().path + "/Android/data")
+                && path.startsWith("${Environment.getExternalStorageDirectory().path}/Android/data")
     }
 
-    fun isRootDir(): Boolean{
+    private fun isRootDir(): Boolean{
         return if (AndroidFileManagerApplication.hasRoot){
             !path.startsWith(Environment.getExternalStorageDirectory().path)
         }else{
@@ -162,15 +161,23 @@ class File(private val path: String) : SimpleStream, SimpleFile{
     }
 
     override fun list(): Array<String?> {
-        var list = if (isPreviewDir){
+        return if (isPreviewDir){
             simpleDocumentFile.list()
         }else if (isRootDir){
             simpleRootFile.list()
         } else {
             simpleFile.list()
         }
-        list = RankFile.orderByName(list)
-        return list
+    }
+
+    fun listFiles(): Array<File?> {
+        val list = list()
+        val arrayOfNulls = arrayOfNulls<File>(list.size)
+        list.indices.forEach {
+            arrayOfNulls[it] = File(list[it]!!)
+        }
+        return arrayOfNulls
+
     }
 
     fun listNoRank(): Array<String?> {
@@ -220,5 +227,9 @@ class File(private val path: String) : SimpleStream, SimpleFile{
         } else {
             FileOutputStream(path)
         }
+    }
+
+    override fun toString(): String {
+        return "{name: ${getName()}, path: ${getPath()}}"
     }
 }

@@ -23,7 +23,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 class LabelListAdapter(private val activity: AppCompatActivity, private val recyclerView: RecyclerView)
     : RecyclerView.Adapter<LabelListAdapter.LabelHolder>() {
 
-    private val list: ArrayList<SimpleFileBean> = ArrayList()
+    val list: ArrayList<SimpleFileBean> = ArrayList()
 
     private var viewModel: FileChangedViewModel = ViewModelProvider(activity).get(FileChangedViewModel::class.java)
 
@@ -102,11 +102,48 @@ class LabelListAdapter(private val activity: AppCompatActivity, private val recy
     @SuppressLint("NotifyDataSetChanged")
     fun updateList(files: ArrayList<SimpleFileBean>){
         this.list.clear()
-        this.list.addAll(files)
-        notifyDataSetChanged()
-        val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        linearLayoutManager.stackFromEnd = true
-        recyclerView.layoutManager = linearLayoutManager
+        files.forEach {
+            this.list.add(it)
+            notifyItemInserted(this.list.size - 1)
+            recyclerView.scrollToPosition(this.list.size - 1)
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun addList(bean: SimpleFileBean){
+        this.list.add(bean)
+        try {
+            notifyItemInserted(this.list.size - 1)
+            notifyItemChanged(this.list.size - 2)
+            recyclerView.scrollToPosition(itemCount - 1)
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun deleteList(position: Int){
+        this.list.removeAt(position)
+        try {
+            notifyItemRemoved(position)
+            notifyItemChanged(position - 1)
+            recyclerView.scrollToPosition(position - 1)
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    fun jumpList(position: Int){
+        val itemCount = itemCount
+        for (i in position until itemCount){
+            try {
+                notifyItemRemoved(this.list.size - 1)
+                notifyItemChanged(this.list.size - 2)
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+            this.list.removeAt(this.list.size - 1)
+        }
     }
 
     class LabelHolder(var binding: ItemLabelBinding

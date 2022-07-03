@@ -9,4 +9,7 @@ class FileItemBean {
     var length = 0L
     var lastModified = 0L
     var appIcon: Drawable? = null
+    override fun toString(): String {
+        return "{isDirectory:$isDirectory, name:\"$name\", path: \"$path\", length:$length, lastModified:$lastModified, appIcon:${appIcon.toString()}}"
+    }
 }

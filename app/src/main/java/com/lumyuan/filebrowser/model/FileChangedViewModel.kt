@@ -6,6 +6,7 @@ import com.lumyuan.filebrowser.pojo.SimpleFileBean
 
 class FileChangedViewModel: ViewModel() {
     val filePath: MutableLiveData<ArrayList<SimpleFileBean>> = MutableLiveData()
+    val listPosition: MutableLiveData<Int> = MutableLiveData(0)
     fun getPath(): String {
         val stringBuilder = StringBuilder()
         for (index in filePath.value!!){

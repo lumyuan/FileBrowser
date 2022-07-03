@@ -49,8 +49,6 @@ object AndroidFileManagerApplication {
             ShellExecutor.setExtraEnvPath(
                 FileWrite.getPrivateFilePath(context, context.getString(R.string.toolkit_install_path))
             )
-        }else{
-
         }
 
         Busybox(context).forceInstall {

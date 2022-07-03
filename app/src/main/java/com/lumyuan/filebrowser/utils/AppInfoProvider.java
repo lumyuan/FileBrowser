@@ -48,7 +48,7 @@ public class AppInfoProvider {
     @SuppressLint("QueryPermissionsNeeded")
     public Map<String, GameBean> getAllAppsMap(){
         Map<String, GameBean> list = new HashMap<>();
-        for(PackageInfo info : packageManager.getInstalledPackages(PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES)){
+        for(PackageInfo info : packageManager.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES)){
             ApplicationInfo appInfo = info.applicationInfo;
             String packageName = info.packageName;
             Drawable icon = appInfo.loadIcon(packageManager);
