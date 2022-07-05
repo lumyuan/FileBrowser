@@ -7,7 +7,11 @@ import java.io.File
 
 class SimpleRootFile(private val path: String) : SimpleFile{
 
-    private val rootFileInfo: RootFileInfo = RootFile.fileInfo(path)!!
+    private val rootFileInfo: RootFileInfo = try {
+        RootFile.fileInfo(path)!!
+    }catch (e: Exception){
+        RootFileInfo()
+    }
     private val shell = KeepShellPublic.getInstance("file", true)
     private val file = File(path)
     override fun exists(): Boolean {

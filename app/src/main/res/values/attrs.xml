@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <declare-styleable name="ScrollFloatingButton">
+        <attr name="scrollEnable" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="RamInfo">
+        <attr name="total" format="integer" />
+        <attr name="free" format="integer" />
+    </declare-styleable>
+
+    <attr name="cardBg" format="color"/>
+    <declare-styleable name="ProgressState">
+        <attr name="p_total" format="integer" />
+        <attr name="current" format="integer" />
+    </declare-styleable>
+    <attr name="showHints">
+        <!-- Visible on screen; the default value. -->
+        <enum name="visible" value="0" />
+        <!-- Not displayed, but taken into account during layout (space is left for it). -->
+        <enum name="invisible" value="1" />
+        <!-- Completely hidden, as if the view had not been added. -->
+        <enum name="gone" value="2" />
+    </attr>
+    <!--格式为引用-->
+    <attr name="radioButtonStyle" format="reference"/>
+
+    <declare-styleable name="CircleSeekBar">
+        <attr name="mode">
+            <enum name="stroke" value="0" />
+            <enum name="fill" value="1" />
+            <enum name="fill_and_stroke" value="2" />
+        </attr>
+        <attr name="capRound" format="boolean" />
+        <attr name="showText" format="boolean" />
+        <attr name="startAngle" format="float" />
+        <attr name="textSize" format="dimension" />
+        <attr name="textColor" format="color" />
+        <attr name="progressWidth" format="dimension" />
+        <attr name="progressColor" format="color" />
+        <attr name="sProgressWidth" format="dimension" />
+        <attr name="sProgressColor" format="color" />
+        <attr name="progress" format="float" />
+        <attr name="maxProgress" format="float" />
+        <attr name="velocity" format="float" />
+        <attr name="fadeEnable" format="boolean" />
+        <attr name="startAlpha" format="integer" />
+        <attr name="endAlpha" format="integer" />
+        <attr name="zoomEnable" format="boolean" />
+    </declare-styleable>
+</resources>

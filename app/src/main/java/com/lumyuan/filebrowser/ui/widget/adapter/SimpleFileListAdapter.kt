@@ -2,38 +2,45 @@ package com.lumyuan.filebrowser.ui.widget.adapter
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
+import android.graphics.Color
 import android.os.Environment
 import android.os.Handler
 import android.text.format.Formatter
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
-import com.lumyuan.androidfilemanager.FileUtils
+import com.lumyuan.androidfilemanager.dao.FIleOrderRules
 import com.lumyuan.androidfilemanager.file.File
 import com.lumyuan.androidfilemanager.file.RankFile
 import com.lumyuan.filebrowser.FileBrowserApplication
 import com.lumyuan.filebrowser.R
+import com.lumyuan.filebrowser.activities.TextEditorActivity
 import com.lumyuan.filebrowser.databinding.ItemSimpleFileBinding
 import com.lumyuan.filebrowser.model.FileChangedViewModel
 import com.lumyuan.filebrowser.pojo.FileItemBean
 import com.lumyuan.filebrowser.pojo.SimpleFileBean
+import com.lumyuan.filebrowser.utils.DensityUtil
+import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.core.BasePopupView
+import com.lxj.xpopup.interfaces.OnImageViewerLongPressListener
+import com.lxj.xpopup.interfaces.OnSrcViewUpdateListener
+import com.lxj.xpopup.util.SmartGlideImageLoader
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
-import java.io.*
-import kotlin.collections.HashMap
+import kotlin.collections.ArrayList
 
 
 class SimpleFileListAdapter(private var activity: AppCompatActivity,
@@ -41,6 +48,7 @@ class SimpleFileListAdapter(private var activity: AppCompatActivity,
 
     private val viewModel: FileChangedViewModel = ViewModelProvider(activity).get(FileChangedViewModel::class.java)
     private val list = ArrayList<Map<Int, Any>>()
+    val listPath = ArrayList<File?>()
     @SuppressLint("SimpleDateFormat")
     private val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
 
@@ -91,6 +99,7 @@ class SimpleFileListAdapter(private var activity: AppCompatActivity,
                 setAlpha(binding.root, 0F, 1F, 400)
             }
             else ->{
+                binding.root.tag = (list[position][0] as File).getPath()
                 val path = item[0] as File?
                 binding.fileItem.visibility = View.VISIBLE
                 binding.loadItem.visibility = View.GONE
@@ -107,77 +116,134 @@ class SimpleFileListAdapter(private var activity: AppCompatActivity,
                         bean.isDirectory = path.isDirectory()
                         bean.path = path.getPath()
                         bean.lastModified = path.lastModified()
+                        bean.length = if (bean.isDirectory)
+                            path.list().size.toLong()
+                        else
+                            path.length()
                     }catch (e: Exception){}
                     it.onNext(bean)
                     it.onComplete()
                 }.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
-                        binding.fileName.text = it.name
-                        binding.fileConfig.text = if (bean.isDirectory)
-                            "...项\t\t|\t\t${simpleDateFormat.format(Date(bean.lastModified))}"
-                        else
-                            "${Formatter.formatFileSize(activity, bean.length).replace("吉字节", "GB")}\t\t|\t\t${simpleDateFormat.format(Date(bean.lastModified))}"
-                        Observable.create<Any> { config ->
-                            bean.length = if (bean.isDirectory) try {
-                                path!!.list().size
-                            }catch (e: Exception){
-                                0
-                            }.toLong() else path!!.length()
-                            config.onNext("")
-                            config.onComplete()
-                        }.subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe {
-                                binding.fileConfig.text = if (bean.isDirectory)
-                                    "${bean.length}项\t\t|\t\t${simpleDateFormat.format(Date(bean.lastModified))}"
-                                else
-                                    "${Formatter.formatFileSize(activity, bean.length).replace("吉字节", "GB")}\t\t|\t\t${simpleDateFormat.format(Date(bean.lastModified))}"
-                            }
-                        if (bean.isDirectory){
-                            binding.fileRightIcon.visibility = View.VISIBLE
-                            binding.fileIcon.setImageResource(R.mipmap.ic_folder)
-                            binding.appIcon.visibility = View.GONE
-                            Observable.create { draw ->
+                        if (binding.root.tag == (list[position][0] as File).getPath()){
+                            binding.fileName.text = it.name
+                            binding.fileConfig.text = if (bean.isDirectory)
+                                "${bean.length}项\t\t|\t\t${simpleDateFormat.format(Date(bean.lastModified))}"
+                            else
+                                "${Formatter.formatFileSize(activity, bean.length).replace("吉字节", "GB")}\t\t|\t\t${simpleDateFormat.format(Date(bean.lastModified))}"
+                            if (bean.isDirectory){
+                                binding.fileRightIcon.visibility = View.VISIBLE
+                                binding.fileIcon.setImageResource(R.mipmap.ic_folder_tree)
+                                binding.appIcon.visibility = View.GONE
+                                Observable.create { draw ->
+                                    try {
+                                        val findAppIcon = FileBrowserApplication.appList[bean.name.trim()]!!.icon
+                                        draw.onNext(findAppIcon)
+                                    }catch (e: Exception){
+                                        e.printStackTrace()
+                                    }
+                                    draw.onComplete()
+                                }.subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe { draw ->
+                                        binding.appIcon.setImageDrawable(draw)
+                                        binding.appIcon.visibility = View.VISIBLE
+                                    }
+                                binding.fileTipLayout.visibility = View.GONE
                                 try {
-                                    val findAppIcon = FileBrowserApplication.appList[bean.name.trim()]!!.icon
-                                    draw.onNext(findAppIcon)
+                                    val findAppName = FileBrowserApplication.appList[bean.name.trim()]!!.name
+                                    binding.fileTip.text = findAppName
+                                    binding.fileTipLayout.visibility = View.VISIBLE
                                 }catch (e: Exception){
                                     e.printStackTrace()
                                 }
-                                draw.onComplete()
-                            }.subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe { draw ->
-                                    binding.appIcon.setImageDrawable(draw)
-                                    binding.appIcon.visibility = View.VISIBLE
-                                }
-                            binding.fileTipLayout.visibility = View.GONE
-                            try {
-                                val findAppName = FileBrowserApplication.appList[bean.name.trim()]!!.name
-                                binding.fileTip.text = findAppName
-                                binding.fileTipLayout.visibility = View.VISIBLE
-                            }catch (e: Exception){
-                                e.printStackTrace()
-                            }
-                        }else {
-                            binding.fileRightIcon.visibility = View.GONE
-                            setIcon(binding, bean.name, path!!.getPath())
-                            binding.fileTipLayout.visibility = View.GONE
-                            binding.appIcon.visibility = View.GONE
-
-                        }
-
-                        binding.root.setOnClickListener {
-                            if (bean.isDirectory){
-                                openDirectory(bean.name)
                             }else {
+                                binding.fileRightIcon.visibility = View.GONE
+                                setIcon(binding, bean.name, path!!.getPath())
+                                binding.fileTipLayout.visibility = View.GONE
+                                binding.appIcon.visibility = View.GONE
 
                             }
+
+                            binding.fileItem.setOnClickListener {
+                                if (bean.isDirectory){
+                                    openDirectory(bean.name)
+                                }else {
+                                    openFile(binding, bean.path)
+                                }
+                            }
+                            loaded(binding, true)
                         }
-                        loaded(binding, true)
                     }
 
+            }
+        }
+    }
+
+    private var dpi = 0
+    private fun openFile(binding: ItemSimpleFileBinding, path: String) {
+        when (try {
+            path.substring(path.lastIndexOf(".")).lowercase()
+        }catch (e: Exception){
+            ".txt"
+        }) {
+            ".java", ".iyu", ".myu", ".ijava", ".ilua",
+            ".ijs", ".sh", ".kt", ".json", ".xml", ".html",
+            ".gradle", ".css", ".txt"-> {
+                val intent = Intent(activity, TextEditorActivity::class.java)
+                intent.putExtra("file", path)
+                activity.startActivity(intent)
+            }
+            ".jpg", ".png", ".gif", ".psd", ".tif", ".bnp", ".dng", ".jpeg", ".heic"->{
+                val pics = ArrayList<String>()
+                var position = 0
+                for (i in listPath.indices) {
+                    val type = try {
+                        listPath[i]!!.getName().substring(listPath[i]!!.getName().lastIndexOf("."))
+                            .lowercase()
+                    } catch (e: Exception) {
+                        ".txt"
+                    }
+                    if (type.contains("jpg") || type.contains("png") || type.contains("gif")
+                        || type.contains("psd") || type.contains("tif") || type.contains("bnp")
+                        || type.contains("dng") || type.contains("jpeg") || type.contains("heic")){
+                        pics.add(listPath[i]!!.getPath())
+                    }
+                }
+                for (it in pics.indices) {
+                    if (pics[it] == path){
+                        position = it
+                        break
+                    }
+                }
+                XPopup.Builder(activity)
+                    .asImageViewer(binding.fileIcon,
+                        position,
+                        pics as List<Any>,
+                        false,
+                        true,
+                        -1,
+                        -1,
+                        if (dpi == 0) DensityUtil.dip2px(
+                            activity,
+                            10F
+                        ) else dpi.also {
+                            dpi = it
+                        },
+                        false,
+                        Color.BLACK,
+                        { popupView, position ->
+
+                        },
+                        SmartGlideImageLoader(true, R.drawable.file_icon_picture_phone),
+                        { popupView: BasePopupView?, posit: Int ->
+
+                        })
+                    .show()
+            }
+            else -> {
+                Toast.makeText(activity, "暂不支持打开这类文件", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -286,15 +352,17 @@ class SimpleFileListAdapter(private var activity: AppCompatActivity,
         value.addAll(viewModel.filePath.value!!)
         val element = SimpleFileBean()
         element.name = name
-        val layoutManager =
-            Objects.requireNonNull(recyclerView.layoutManager) as StaggeredGridLayoutManager
-        val mFirstVisibleItems =
-            layoutManager.findFirstVisibleItemPositions(IntArray(layoutManager.spanCount))[0]
+        val layoutManager = Objects.requireNonNull(recyclerView.layoutManager) as StaggeredGridLayoutManager
+        val mFirstVisibleItems = layoutManager.findFirstVisibleItemPositions(IntArray(layoutManager.spanCount))[0]
         try {
             value[value.size - 1].position = mFirstVisibleItems
-        }catch (e: Exception){  }
+            viewModel.listPosition.value = mFirstVisibleItems
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
         element.path = "${viewModel.getPath()}/$name"
         value.add(element)
+        viewModel.action.value = ACTION_LOAD
         viewModel.filePath.value = value
     }
 
@@ -304,7 +372,7 @@ class SimpleFileListAdapter(private var activity: AppCompatActivity,
 
     private var showPosition = true
     @SuppressLint("NotifyDataSetChanged")
-    fun updateList(list: String){
+    fun updateList(list: String, rules: Int, action: Int){
         this.list.clear()
         val map = HashMap<Int, Any>()
         map[1] = "loading..."
@@ -313,7 +381,33 @@ class SimpleFileListAdapter(private var activity: AppCompatActivity,
         Observable.create {
             try {
                 val listFiles = File(list).listFiles()
-                RankFile.orderByType(listFiles)
+                when(rules){
+                    FIleOrderRules.ORDER_BY_NAME + FIleOrderRules.ORDER_BY_SIMPLE->{
+                        RankFile.orderByName(listFiles, rules)
+                    }
+                    FIleOrderRules.ORDER_BY_SIZE + FIleOrderRules.ORDER_BY_SIMPLE->{
+                        RankFile.orderBySize(listFiles, rules)
+                    }
+                    FIleOrderRules.ORDER_BY_DATE + FIleOrderRules.ORDER_BY_SIMPLE->{
+                        RankFile.orderByDate(listFiles, rules)
+                    }
+                    FIleOrderRules.ORDER_BY_TYPE + FIleOrderRules.ORDER_BY_SIMPLE->{
+                        RankFile.orderByType(listFiles, rules)
+                    }
+
+                    FIleOrderRules.ORDER_BY_NAME + FIleOrderRules.ORDER_BY_INVERSE->{
+                        RankFile.orderByName(listFiles, rules)
+                    }
+                    FIleOrderRules.ORDER_BY_SIZE + FIleOrderRules.ORDER_BY_INVERSE->{
+                        RankFile.orderBySize(listFiles, rules)
+                    }
+                    FIleOrderRules.ORDER_BY_DATE + FIleOrderRules.ORDER_BY_INVERSE->{
+                        RankFile.orderByDate(listFiles, rules)
+                    }
+                    FIleOrderRules.ORDER_BY_TYPE + FIleOrderRules.ORDER_BY_INVERSE->{
+                        RankFile.orderByType(listFiles, rules)
+                    }
+                }
                 it.onNext(listFiles)
             }catch (e : Exception){
                 e.printStackTrace()
@@ -350,13 +444,31 @@ class SimpleFileListAdapter(private var activity: AppCompatActivity,
                                 notifyItemInserted(index)
                             }
                         }
+                        listPath.clear()
+                        listPath.addAll(files.asList())
                     }
                     recyclerView.post {
-                        recyclerView.scrollToPosition(if (!showPosition)viewModel.filePath.value!![viewModel.filePath.value!!.size - 1].position else viewModel.listPosition.value!!)
-                        showPosition = false
+                        when (action) {
+                            ACTION_ORDER -> {
+                                recyclerView.scrollToPosition(viewModel.listPosition.value!!)
+                            }
+                            ACTION_BACK -> {
+                                recyclerView.scrollToPosition(if (!showPosition)viewModel.filePath.value!![viewModel.filePath.value!!.size - 1].position else viewModel.listPosition.value!!)
+                                showPosition = false
+                            }
+                            ACTION_LOAD -> {
+                                recyclerView.scrollToPosition(0)
+                            }
+                        }
                     }
                 }
             }
+    }
+
+    companion object{
+        val ACTION_ORDER = 0
+        val ACTION_BACK = 1
+        val ACTION_LOAD = 2
     }
 
     class FileHolder (var binding: ItemSimpleFileBinding

@@ -1,18 +1,14 @@
 package com.lumyuan.filebrowser.base
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.annotation.NonNull
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import com.gyf.barlibrary.ImmersionBar
 import com.lumyuan.androidfilemanager.utils.ExternalStoragePermissionsUtils
+import com.lumyuan.filebrowser.R
 
 open class BaseActivity: AppCompatActivity() {
 
@@ -33,6 +29,7 @@ open class BaseActivity: AppCompatActivity() {
             .transparentNavigationBar()
             .navigationBarDarkIcon(true)
             .transparentNavigationBar()
+            .keyboardEnable(true)
             .init()
     }
 

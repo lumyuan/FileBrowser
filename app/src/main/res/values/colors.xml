@@ -16,6 +16,10 @@
     <color name="gray_300">#E0E0E0</color>
     <color name="gray_400">#BDBDBD</color>
 
+    <color name="sort_color">#FF9DE8BF</color>
+    <color name="sort_color_bg">#309DE8BF</color>
+    <color name="sort_color_deep">#FF7CCFA1</color>
+
     <color name="text_black">#FF474658</color>
     <color name="text_light">#60000000</color>
     <color name="theme">#FF119EFF</color>

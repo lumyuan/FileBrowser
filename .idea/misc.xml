@@ -4,12 +4,21 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/AndroidFileManager/src/main/res/layout/file_label_fragment.xml" value="0.21979166666666666" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/alpha_gradient.xml" value="0.2265" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/doc_icon_grid_default.xml" value="0.2265" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/fab_down_normals.xml" value="0.2265" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/fab_down_selects.xml" value="0.2265" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/fab_up_normals.xml" value="0.2265" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/fab_up_selects.xml" value="0.2265" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/file_icon_video_phone.xml" value="0.2265" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/file_icon_word_phone_mirror.xml" value="0.2265" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/ic_home_action_create.xml" value="0.2265" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/ic_home_create_sort.xml" value="0.2265" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/shape_label_last.xml" value="0.2265" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/shape_radius_editor.xml" value="0.2265" />
-        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/activity_main.xml" value="0.2033514492753623" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/activity_text_edit.xml" value="0.2033514492753623" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/dialog_file_sort.xml" value="0.74822695035461" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/file_label_fragment.xml" value="0.21979166666666666" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/item_label.xml" value="0.4395833333333333" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/item_simple_file.xml" value="0.22" />

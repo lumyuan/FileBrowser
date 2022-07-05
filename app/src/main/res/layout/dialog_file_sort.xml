@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/root">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardElevation="@dimen/dp_5"
+        app:cardCornerRadius="@dimen/dp_15"
+        android:layout_margin="@dimen/dp_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_20"
+                android:paddingTop="@dimen/dp_15"
+                android:paddingBottom="@dimen/dp_15"
+                android:paddingEnd="@dimen/dp_20"
+                android:id="@+id/fileNameLayout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="文件名称"
+                    android:textSize="@dimen/sp_18"
+                    android:textColor="@color/gray_text"
+                    android:id="@+id/fileNameText"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_marginStart="@dimen/dp_50"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_9"
+                        android:layout_height="@dimen/dp_6"
+                        android:src="@drawable/fab_up_normals"
+                        android:id="@+id/fileNameUp"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_9"
+                        android:layout_height="@dimen/dp_6"
+                        android:src="@drawable/fab_down_normals"
+                        android:layout_marginTop="2.5dp"
+                        android:id="@+id/fileNameDown"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_20"
+                android:paddingTop="@dimen/dp_15"
+                android:paddingBottom="@dimen/dp_15"
+                android:paddingEnd="@dimen/dp_20"
+                android:id="@+id/fileSizeLayout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="文件大小"
+                    android:textSize="@dimen/sp_18"
+                    android:textColor="@color/gray_text"
+                    android:id="@+id/fileSizeText"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_marginStart="@dimen/dp_50"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_9"
+                        android:layout_height="@dimen/dp_6"
+                        android:src="@drawable/fab_up_normals"
+                        android:id="@+id/fileSizeUp"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_9"
+                        android:layout_height="@dimen/dp_6"
+                        android:src="@drawable/fab_down_normals"
+                        android:layout_marginTop="2.5dp"
+                        android:id="@+id/fileSizeDown"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_20"
+                android:paddingTop="@dimen/dp_15"
+                android:paddingBottom="@dimen/dp_15"
+                android:paddingEnd="@dimen/dp_20"
+                android:id="@+id/updateLayout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="修改时间"
+                    android:textSize="@dimen/sp_18"
+                    android:textColor="@color/gray_text"
+                    android:id="@+id/updateText"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_marginStart="@dimen/dp_50"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_9"
+                        android:layout_height="@dimen/dp_6"
+                        android:src="@drawable/fab_up_normals"
+                        android:id="@+id/updateUp"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_9"
+                        android:layout_height="@dimen/dp_6"
+                        android:src="@drawable/fab_down_normals"
+                        android:layout_marginTop="2.5dp"
+                        android:id="@+id/updateDown"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_20"
+                android:paddingTop="@dimen/dp_15"
+                android:paddingBottom="@dimen/dp_15"
+                android:paddingEnd="@dimen/dp_20"
+                android:id="@+id/fileTypeLayout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="文件类型"
+                    android:textSize="@dimen/sp_18"
+                    android:textColor="@color/gray_text"
+                    android:id="@+id/fileTypeText"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_marginStart="@dimen/dp_50"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_9"
+                        android:layout_height="@dimen/dp_6"
+                        android:src="@drawable/fab_up_normals"
+                        android:id="@+id/fileTypeUp"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_9"
+                        android:layout_height="@dimen/dp_6"
+                        android:src="@drawable/fab_down_normals"
+                        android:layout_marginTop="2.5dp"
+                        android:id="@+id/fileTypeDown"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

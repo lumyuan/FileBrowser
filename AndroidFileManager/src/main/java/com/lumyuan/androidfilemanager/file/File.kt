@@ -27,12 +27,12 @@ class File(private val path: String) : SimpleStream, SimpleFile{
         isRootDir = isRootDir()
     }
 
-    private fun isPreviewDir(): Boolean{
+    fun isPreviewDir(): Boolean{
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
                 && path.startsWith("${Environment.getExternalStorageDirectory().path}/Android/data")
     }
 
-    private fun isRootDir(): Boolean{
+    fun isRootDir(): Boolean{
         return if (AndroidFileManagerApplication.hasRoot){
             !path.startsWith(Environment.getExternalStorageDirectory().path)
         }else{

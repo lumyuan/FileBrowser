@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.lumyuan.androidfilemanager.AndroidFileManagerApplication
 import com.lumyuan.filebrowser.R
 import com.lumyuan.filebrowser.databinding.ItemLabelBinding
 import com.lumyuan.filebrowser.model.FileChangedViewModel
@@ -51,7 +52,13 @@ class LabelListAdapter(private val activity: AppCompatActivity, private val recy
             }.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    viewModel.filePath.value = it
+                   if (position != viewModel.filePath.value!!.size - 1){
+                       if ((!AndroidFileManagerApplication.hasRoot && viewModel.filePath.value!!.size > 4)
+                           || (viewModel.filePath.value!!.size > 1 && AndroidFileManagerApplication.hasRoot)){
+                           viewModel.action.value = SimpleFileListAdapter.ACTION_BACK
+                           viewModel.filePath.value = it
+                       }
+                   }
                 }
         }
 
@@ -78,7 +85,7 @@ class LabelListAdapter(private val activity: AppCompatActivity, private val recy
             binding.labelName.setBackgroundResource(R.drawable.shape_label_mid)
             binding.rightIcon.visibility = View.VISIBLE
         }else {
-            binding.labelName.setTextColor(Color.parseColor(binding.root.context.getString(R.color.orange)))
+            binding.labelName.setTextColor(Color.parseColor(binding.root.context.getString(R.color.sort_color_deep)))
             binding.labelName.setBackgroundResource(R.drawable.shape_label_last)
             binding.rightIcon.visibility = View.GONE
         }
