@@ -16,12 +16,16 @@
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/ic_home_create_sort.xml" value="0.2265" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/shape_label_last.xml" value="0.2265" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/shape_radius_editor.xml" value="0.2265" />
-        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/shape_tree_switch.xml" value="0.2265" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/shape_tree_switch_def.xml" value="0.2265" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/drawable/shape_tree_switch_sel.xml" value="0.2265" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/activity_main.xml" value="0.328149300155521" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/activity_text_edit.xml" value="0.2033514492753623" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/dialog_file_sort.xml" value="0.74822695035461" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/file_label_fragment.xml" value="0.21979166666666666" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/item_label.xml" value="0.4395833333333333" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/item_simple_file.xml" value="0.22" />
+        <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/item_tree.xml" value="1.5" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/main_activity.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/LumYuan/AndroidStudioProjects/FileBrowser/app/src/main/res/layout/test_activity.xml" value="0.20520833333333333" />
       </map>

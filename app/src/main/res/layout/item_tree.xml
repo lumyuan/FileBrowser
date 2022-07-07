@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:id="@+id/itemInfoLayout"
+        android:animateLayoutChanges="true">
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_1"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="@dimen/dp_10"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/sort_color"
+                android:id="@+id/treeLineTop"
+                android:layout_weight="1"/>
+
+            <View
+                android:layout_width="@dimen/dp_10"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/sort_color"
+                android:id="@+id/treeLineDown"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/dp_10"
+            android:layout_height="@dimen/dp_1"
+            android:background="@color/sort_color"
+            android:id="@+id/treeLine"/>
+
+        <ImageView
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:src="@mipmap/ic_file_right"
+            android:tint="@color/gray"
+            android:id="@+id/collapseItemIcon"
+            tools:ignore="UseAppTint" />
+
+        <ImageView
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
+            android:id="@+id/treeFolderIcon"
+            android:src="@mipmap/ic_folder_tree"
+            android:layout_marginStart="@dimen/dp_10"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/itemName"
+            android:singleLine="true"
+            android:text="@string/app_name"
+            android:layout_marginStart="@dimen/dp_10"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/gray"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:id="@+id/treeListLayout"
+        android:visibility="gone"
+        android:animateLayoutChanges="true"
+        android:layout_marginStart="@dimen/dp_20">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/itemList"
+            android:scrollbars="none"
+            android:overScrollMode="never"/>
+
+    </LinearLayout>
+
+</LinearLayout>

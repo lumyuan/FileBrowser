@@ -7,10 +7,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.main.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidFileManager/FileBrowser.AndroidFileManager.unitTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/XPopupLibrary/FileBrowser.XPopupLibrary.iml" filepath="$PROJECT_DIR$/.idea/modules/XPopupLibrary/FileBrowser.XPopupLibrary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/XPopupLibrary/FileBrowser.XPopupLibrary.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/XPopupLibrary/FileBrowser.XPopupLibrary.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/XPopupLibrary/FileBrowser.XPopupLibrary.main.iml" filepath="$PROJECT_DIR$/.idea/modules/XPopupLibrary/FileBrowser.XPopupLibrary.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/XPopupLibrary/FileBrowser.XPopupLibrary.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/XPopupLibrary/FileBrowser.XPopupLibrary.unitTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FileBrowser.app.main.iml" />

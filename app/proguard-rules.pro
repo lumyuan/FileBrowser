@@ -20,9 +20,10 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.lumyuan.filebrowser.pojo.** {*;}
--keep class com.wang.avi.indicators.** {*;}
--keep class com.lumyuan.filebrowser.config.** {*;}
+-keep class com.lumyuan.filebrowser.pojo.**{*;}
+-keep class com.wang.avi.indicators.**{*;}
+-keep class com.lumyuan.filebrowser.config.**{*;}
+-keep class com.lumyuan.filebrowser.model.**{*;}
 
 -dontwarn com.lxj.xpopup.widget.**
 -keep class com.lxj.xpopup.widget.**{*;}

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activities.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,7 +35,9 @@
                         android:layout_width="@dimen/dp_40"
                         android:layout_height="@dimen/dp_40"
                         android:src="@drawable/ic_home_create_sort"
-                        android:id="@+id/listSortButton"/>
+                        android:id="@+id/listSortButton"
+                        android:tint="@color/gray_400"
+                        tools:ignore="UseAppTint" />
 
                 </LinearLayout>
 
@@ -55,25 +58,103 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="horizontal"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:animateLayoutChanges="true"
+            android:id="@+id/listRoot"
+            android:background="@color/background">
 
-            <HorizontalScrollView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:overScrollMode="never">
+                android:orientation="vertical">
 
-                <com.lumyuan.filebrowser.ui.widget.OverScrollRecyclerView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/treeList"/>
+                    android:gravity="center_vertical|end"
+                    android:id="@+id/treToolBar"
+                    android:background="@color/white"
+                    android:layout_marginEnd="@dimen/dp_30">
 
-            </HorizontalScrollView>
+                    <ImageView
+                        android:layout_width="@dimen/dp_20"
+                        android:layout_height="@dimen/dp_20"
+                        android:src="@mipmap/ic_collapse_all"
+                        android:id="@+id/collapseAll"
+                        android:tint="@color/gray_400"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:layout_marginBottom="@dimen/dp_5"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        tools:ignore="UseAppTint" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:id="@+id/treeRoot"
+                    android:elevation="@dimen/dp_5">
+
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:overScrollMode="never"
+                        android:layout_weight="1"
+                        android:id="@+id/treeHorizontalView"
+                        android:visibility="gone"
+                        android:background="@color/white">
+
+                        <HorizontalScrollView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/treeList"/>
+
+                        </HorizontalScrollView>
+
+                    </androidx.core.widget.NestedScrollView>
+
+                    <LinearLayout
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/treeSwitch"
+                        android:background="@drawable/shape_tree_switch_def"
+                        android:animateLayoutChanges="true"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dp_30">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="树\n形\n视\n图"
+                            android:textSize="@dimen/sp_14"
+                            android:textColor="@color/sort_color_deep"
+                            android:layout_marginTop="@dimen/dp_5"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/dp_25"
+                            android:layout_height="@dimen/dp_25"
+                            android:id="@+id/switchIcon"
+                            android:src="@mipmap/ic_tree_right_switch"
+                            android:tint="@color/sort_color_deep"
+                            tools:ignore="UseAppTint"
+                            android:layout_marginBottom="@dimen/dp_5"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <com.lumyuan.filebrowser.ui.widget.OverScrollRecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/simpleList"
-                />
+                android:id="@+id/simpleList"/>
 
         </LinearLayout>
 

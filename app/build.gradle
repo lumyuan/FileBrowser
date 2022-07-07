@@ -36,10 +36,7 @@ android {
     buildTypes {
         release {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            zipAlignEnabled true
-            debuggable false
-            jniDebuggable = false
-            minifyEnabled = true
+            minifyEnabled = false
             signingConfig signingConfigs.ly_Signing
         }
         debug {
@@ -63,12 +60,12 @@ android {
     }
 
     packagingOptions {
-//        pickFirst "license/README.dom.txt"
-//        pickFirst "license/LICENSE.dom-documentation.txt"
-//        pickFirst "license/NOTICE"
-//        pickFirst "license/LICENSE.dom-software.txt"
-//        pickFirst "license/LICENSE"
-        resources.excludes += "license/*"
+        pickFirst "license/README.dom.txt"
+        pickFirst "license/LICENSE.dom-documentation.txt"
+        pickFirst "license/NOTICE"
+        pickFirst "license/LICENSE.dom-software.txt"
+        pickFirst "license/LICENSE"
+        //resources.excludes += "license/*"
     }
 }
 
@@ -87,7 +84,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation project(":AndroidFileManager")
-//    implementation project(":XPopupLibrary")
 
     //异步处理
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
